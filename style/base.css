@@ -912,3 +912,57 @@ align-content: flex-start;
     margin-top: 6px;
     transition: transform 0.3s ease;
   }
+
+
+
+
+  /******************** PENALTIES ***********************/
+
+  
+.penalties-section {
+  max-width: 1100px;
+  margin: 30px auto;
+}
+
+.penalties-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #f5f5f5;
+  color: #000;
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 15px; /* fonte maior */
+}
+
+.penalties-table th {
+  background: #111;
+  color: white;
+  padding: 6px 8px; /* mais compacto */
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+.penalties-table td {
+  padding: 5px 8px; /* ↓ altura da linha */
+  border: 1px solid #00000025;
+  line-height: 1.2;
+}
+
+.penalties-table tr:nth-child(even) {
+  background: #ececec;
+}
+
+.penalties-table tr:hover {
+  background: #dddddd;
+  transition: 0.15s;
+}
+
+.penalties-table td:first-child {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.penalties-table td:last-child {
+  font-weight: 700;
+  text-align: center;
+}
