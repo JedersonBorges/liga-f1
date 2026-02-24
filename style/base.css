@@ -966,3 +966,28 @@ align-content: flex-start;
   font-weight: 700;
   text-align: center;
 }
+
+
+/* ===== TABELA PONTUAÇÃO CENTRALIZADA ===== */
+#pontuacaoTable {
+  margin: auto;        /* centraliza horizontalmente */
+  border-collapse: collapse;
+  text-align: center;
+}
+
+#centralizar {
+  text-align: center;
+}
+
+/* garante que o container não empurre para esquerda */
+#pontuacaoTable-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* células */
+#pontuacaoTable th,
+#pontuacaoTable td {
+  padding: 6px 10px;
+}
