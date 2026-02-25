@@ -6,26 +6,12 @@
   <title>CSA - Sombras do Asfalto</title>
   <link rel="stylesheet" href="style/base.css">
   <style>
-      body {
-    background-color: #111111;
-    color: #fff;
-  }
-  /* Ajuste do hero */
-  .hero {
-    margin: 0;           /* Remove margem externa */
-    padding: 20px 0;     /* Ajuste de padding interno */
-    text-align: center;
-  }
-  .hero h1 {
-    margin: 0;           /* Remove a margem do h1 */
-    font-size: 2.5rem;
-  }
 
   /* Estilo do vídeo */
   .video-section {
     display: flex;
     justify-content: center;
-    margin: 20px 0;       /* Reduz a margem acima e abaixo */
+    margin: 20px 0;
   }
   .video-section iframe {
     width: 100%;
@@ -35,14 +21,76 @@
     border-radius: 8px;
   }
 
+  /* Estilo da Manchete */
+  .headline-container {
+    max-width: 800px;
+    margin: -10px auto 30px auto; /* Encosta no vídeo e dá espaço para o calendário */
+    padding: 0 10px;
+  }
+
+  .headline-badge {
+    background-color: #ff0000;
+    color: white;
+    padding: 4px 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    display: inline-block;
+    border-radius: 4px 4px 0 0;
+  }
+
+  .headline-text {
+    background: #1f1f27;
+    border-left: 4px solid #ff0000; /* Linha mais grossa estilo F1 */
+    padding: 20px;
+    font-size: 1.25rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-style: italic;
+    letter-spacing: -0.5px;
+    color: #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Para não quebrar em telas pequenas */
+    gap: 15px;
+  }
+
+  /* Botão de Inscrição Estilizado */
+  .btn-inscricao {
+    background-color: #ff0000;
+    color: white !important;
+    text-decoration: none !important;
+    padding: 8px 20px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-style: normal; /* Tira o itálico do h1 */
+    transition: 0.3s;
+    display: inline-block;
+  }
+
+  .btn-inscricao:hover {
+    background-color: white;
+    color: black !important;
+    transform: scale(1.05);
+  }
+
+  /* Ajuste para o vídeo "travado" */
+  .video-lock {
+    pointer-events: none;
+    width: 100%;
+    max-width: 800px;
+  }
+
   </style>
 </head>
 <body>
-  <!-------------------------------------------------------------------------------------------->
-  <!-----------------------------------HEADER PADRÃO-------------------------------------------->
+
   <header>
-    <a href="index.html"><img src="imagens/csa-logo.jpg" alt="F1 Esports Logo" /></a>
+    <a href="index.html"><img src="logos/f1.png" alt="F1 Esports Logo" /></a>
     <nav>
+
       <a href="standings.html">Classificação</a>
       <a href="drivers.html">Pilotos</a>
       <a href="h2h.html">Head to head</a>
@@ -57,52 +105,58 @@
       </span>
     </nav>
   </header>
-  <!--------------------------------------------------------------------------------->
 
+  <h1>Sombras do Asfalto</h1>
 
-
-  <!--  SEÇÃO DE VÍDEO -->
-   <h2>CSA - Sombras do Asfalto</h2>
   <section class="video-section">
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/QPZwL_zFHiY?si=7ncJnPR4DjxMo3nj" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <div class="video-lock">
+      <iframe 
+        width="100%" 
+        height="450" 
+        src="https://www.youtube.com/embed/QPZwL_zFHiY?autoplay=1&mute=1&loop=1&playlist=QPZwL_zFHiY&controls=0&disablekb=1&modestbranding=1&rel=0" 
+        title="YouTube video player" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen>
+      </iframe>
+    </div>
   </section>
 
+  <div class="headline-container">
+    <div class="headline-badge">Inscrições Abertas</div>
+    <div class="headline-text">
+      <span>Garanta sua vaga para a 1ª Temporada!</span>
+      <a href="https://api.whatsapp.com/send?phone=5516999899572&text=Ol%C3%A1.+Gostaria+de+me+inscrever+na+CSA%21" 
+         target="_blank" 
+         class="btn-inscricao">
+        Inscreva-se <span class="btn-icon">→</span>
+      </a>
+    </div>
+  </div>
+
   <section class="calendar-container">
-    <h2>CALENDAR</h2>
+    <h1>CALENDAR</h1>
     <div class="carousel-wrapper">
       <button class="arrow left" onclick="scrollCarousel(-1)">&#9664;</button>
       <div class="carousel" id="carousel">
-        <!-- Cards gerados via JS -->
-      </div>
+        </div>
       <button class="arrow right" onclick="scrollCarousel(1)">&#9654;</button>
     </div>
   </section>
 
   <script src="scripts/script_f1_bzk.js"></script>
 
-<!--------------------------------------------------------------------------------->
-<!-------------------------------------FOOTER-------------------------------------->
-<footer>
-  <div class="footer-content">
-    <span>© 2026 Campeonato Sombras do Asfalto. All rights reserved.</span>
-              <div class="social-icons">
-        <a href="https://www.instagram.com/csa_sombrasdoasfalto" target="_blank">
-          <img src="imagens/instagram.png" alt="Instagram" class="-icon">
-        </a>
-        <a href="https://www.youtube.com/@CSA_e-racing" target="_blank" >
-          <img src="imagens/youtube.png" alt="YouTube" class="social-icon">
-        </a>
-        <a href="https://discord.com/invite/KS6PuRd5" target="_blank" >
-          <img src="imagens/discord.png" alt="Discord" class="social-icon">
-        </a>
+  <footer>
+    <div class="footer-content">
+      <span>© 2026 Campeonato Sombras do Asfalto. All rights reserved.</span>
+      <div class="social-icons">
+        <a href="https://www.instagram.com/csa_sombrasdoasfalto" target="_blank"><img src="imagens/instagram.png" alt="Instagram"></a>
+        <a href="https://www.youtube.com/@CSA_e-racing" target="_blank" ><img src="imagens/youtube.png" alt="YouTube"></a>
+        <a href="https://discord.com/invite/KS6PuRd5" target="_blank" ><img src="imagens/discord.png" alt="Discord"></a>
       </div>
-    
-  </div>
+    </div>
     <span class="footer-note">Desenvolvido por Jederson Borges</span> 
-  </div>
-</footer>
-<!--------------------------------------------------------------------------------->
-<!--------------------------------------------------------------------------------->
+  </footer>
 
 </body>
 </html>

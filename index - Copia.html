@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CSA - Sombras do Asfalto</title>
+  <link rel="stylesheet" href="style/base.css">
+  <style>
+      body {
+    background-color: #111111;
+    color: #fff;
+  }
+  /* Ajuste do hero */
+  .hero {
+    margin: 0;           /* Remove margem externa */
+    padding: 20px 0;     /* Ajuste de padding interno */
+    text-align: center;
+  }
+  .hero h1 {
+    margin: 0;           /* Remove a margem do h1 */
+    font-size: 2.5rem;
+  }
+
+  /* Estilo do vídeo */
+  .video-section {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;       /* Reduz a margem acima e abaixo */
+  }
+  .video-section iframe {
+    width: 100%;
+    max-width: 800px;
+    height: 450px;
+    border: none;
+    border-radius: 8px;
+  }
+
+  </style>
+</head>
+<body>
+  <!-------------------------------------------------------------------------------------------->
+  <!-----------------------------------HEADER PADRÃO-------------------------------------------->
+  <header>
+    <a href="index.html"><img src="imagens/csa-logo.jpg" alt="F1 Esports Logo" /></a>
+    <nav>
+      <a href="standings.html">Classificação</a>
+      <a href="drivers.html">Pilotos</a>
+      <a href="h2h.html">Head to head</a>
+      <a href="punicoes.html">Punições</a>
+      <a href="ranking.html">Ranking</a>
+      <span class="dropdown">
+        <a href="#">More</a>
+        <span class="dropdown-content">
+          <a href="#">Contact</a>
+          <a href="#">Rules</a>
+        </span>
+      </span>
+    </nav>
+  </header>
+  <!--------------------------------------------------------------------------------->
+
+
+
+  <!--  SEÇÃO DE VÍDEO -->
+   <h2>CSA - Sombras do Asfalto</h2>
+  <section class="video-section">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/QPZwL_zFHiY?si=7ncJnPR4DjxMo3nj" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  </section>
+
+  <section class="calendar-container">
+    <h2>CALENDAR</h2>
+    <div class="carousel-wrapper">
+      <button class="arrow left" onclick="scrollCarousel(-1)">&#9664;</button>
+      <div class="carousel" id="carousel">
+        <!-- Cards gerados via JS -->
+      </div>
+      <button class="arrow right" onclick="scrollCarousel(1)">&#9654;</button>
+    </div>
+  </section>
+
+  <script src="scripts/script_f1_bzk.js"></script>
+
+<!--------------------------------------------------------------------------------->
+<!-------------------------------------FOOTER-------------------------------------->
+<footer>
+  <div class="footer-content">
+    <span>© 2026 Campeonato Sombras do Asfalto. All rights reserved.</span>
+              <div class="social-icons">
+        <a href="https://www.instagram.com/csa_sombrasdoasfalto" target="_blank">
+          <img src="imagens/instagram.png" alt="Instagram" class="-icon">
+        </a>
+        <a href="https://www.youtube.com/@CSA_e-racing" target="_blank" >
+          <img src="imagens/youtube.png" alt="YouTube" class="social-icon">
+        </a>
+        <a href="https://discord.com/invite/KS6PuRd5" target="_blank" >
+          <img src="imagens/discord.png" alt="Discord" class="social-icon">
+        </a>
+      </div>
+    
+  </div>
+    <span class="footer-note">Desenvolvido por Jederson Borges</span> 
+  </div>
+</footer>
+<!--------------------------------------------------------------------------------->
+<!--------------------------------------------------------------------------------->
+
+</body>
+</html>

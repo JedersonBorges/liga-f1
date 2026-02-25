@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Virtual - Dashboard</title>
+    <link rel="stylesheet" href="style/style2.css">>
+    <link rel="stylesheet" href="style/base.css">>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+
+    </style>
+</head>
+<body class="p-0 m-0">
+
+    <nav class="nav-gradient border-b border-gray-800 px-6 py-3 flex items-center justify-between">
+        <div class="flex items-center space-x-8">
+            <img src="logos/f1.png" alt="">
+            <div class="hidden md:flex space-x-6 text-sm font-semibold uppercase tracking-wider">
+                <a href="standings.html" class="hover:text-red-500">Classificação</a>
+                <a href="drivers.html" class="hover:text-red-500">Pilotos</a>
+                <a href="h2h.html" class="hover:text-red-500">Head to head</a>
+                <a href="punicoes.html" class="hover:text-red-500">Punições</a>
+                <a href="ranking.html" class="hover:text-red-500">Ranking</a>
+            </div>
+        </div>
+        <div class="flex items-center space-x-4">
+            <button class="text-xs font-bold border border-white px-4 py-1 rounded hover:bg-white hover:text-black transition">SIGN IN</button>
+            <button class="text-xs font-bold f1-bg-red px-4 py-1 rounded">SUBSCRIBE</button>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto p-6">
+        
+        <div class="flex justify-between items-center mb-6 text-sm text-gray-400 border-b border-gray-800 pb-2">
+            <div><span class="f1-red">●</span> AUSTRALIA > 05-08 MAR</div>
+            <div class="flex space-x-4">
+                <span>MY TIME: 21:54</span>
+                <span class="text-white">TRACK TIME: 11:54</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-12 gap-4">
+            
+<div class="col-span-12 lg:col-span-8 relative group cursor-pointer overflow-hidden rounded-xl bg-black h-[500px]">
+    
+    <div class="absolute inset-0 w-full h-full pointer-events-none">
+        <iframe 
+            class="w-full h-[150%] -translate-y-[15%] object-cover scale-110" 
+            src="https://www.youtube.com/embed/QPZwL_zFHiY?autoplay=1&mute=1&loop=1&playlist=QPZwL_zFHiY&controls=0&showinfo=0&rel=0&modestbranding=1" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+        </iframe>
+    </div>
+
+    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent"></div>
+
+    <div class="absolute bottom-0 left-0 p-8 z-10">
+        <span class="f1-bg-red text-[10px] font-bold px-2 py-1 rounded mb-4 inline-block tracking-widest uppercase">Live Stream</span>
+        <h1 class="text-4xl font-black leading-tight italic uppercase tracking-tighter">
+            Acompanhe o GP de Interlagos <br> <span class="text-red-500">Ao Vivo</span>
+        </h1>
+        <p class="text-gray-300 mt-2 font-medium">Assista agora à transmissão do Campeonato Sombras do Asfalto.</p>
+    </div>
+
+    <div class="absolute inset-0 border-0 group-hover:border-4 border-red-600/50 transition-all duration-300 rounded-xl"></div>
+</div>
+
+            <div class="col-span-12 lg:col-span-4 space-y-3">
+                
+                <div class="flex bg-[#1f1f27] rounded-lg overflow-hidden h-24 hover:bg-gray-800 transition cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1547447134-cd3f5c716030?w=300" class="w-32 object-cover">
+                    <div class="p-3 flex items-center">
+                        <p class="text-sm font-medium leading-snug">The state of play at every F1 team ahead of the season</p>
+                    </div>
+                </div>
+
+                <div class="flex bg-[#1f1f27] rounded-lg overflow-hidden h-24 hover:bg-gray-800 transition cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1634542711612-4d2bc3303623?w=300" class="w-32 object-cover">
+                    <div class="p-3 flex items-center">
+                        <p class="text-sm font-medium leading-snug">Ferrari and Mercedes 'the teams to beat' – Stella</p>
+                    </div>
+                </div>
+
+                <div class="flex bg-[#1f1f27] rounded-lg overflow-hidden h-24 hover:bg-gray-800 transition cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1533130061792-64b345e4e837?w=300" class="w-32 object-cover">
+                    <div class="p-3 flex items-center">
+                        <p class="text-sm font-medium leading-snug">F1 Fantasy is back for the 2026 season</p>
+                    </div>
+                </div>
+
+                <div class="flex bg-[#1f1f27] rounded-lg overflow-hidden h-24 hover:bg-gray-800 transition cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1600706432502-77a0e2e327fc?w=300" class="w-32 object-cover">
+                    <div class="p-3 flex items-center">
+                        <p class="text-sm font-medium leading-snug">Get up to speed with the new F1 regulations</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-8">
+            <div class="bg-indigo-100 text-indigo-900 p-4 rounded-lg flex justify-between items-center font-bold uppercase text-sm cursor-pointer hover:bg-white transition">
+                2026 Schedule <span>↗</span>
+            </div>
+            <div class="bg-indigo-100 text-indigo-900 p-4 rounded-lg flex justify-between items-center font-bold uppercase text-sm cursor-pointer hover:bg-white transition">
+                Latest News <span>↗</span>
+            </div>
+            <div class="bg-indigo-100 text-indigo-900 p-4 rounded-lg flex justify-between items-center font-bold uppercase text-sm cursor-pointer hover:bg-white transition">
+                Latest Video <span>↗</span>
+            </div>
+            <div class="bg-indigo-100 text-indigo-900 p-4 rounded-lg flex justify-between items-center font-bold uppercase text-sm cursor-pointer hover:bg-white transition">
+                F1 Betting <span>↗</span>
+            </div>
+        </div>
+        
+
+    </main>
+      <section class="calendar-container">
+    <h2>CALENDAR</h2>
+    <div class="carousel-wrapper">
+      <button class="arrow left" onclick="scrollCarousel(-1)">&#9664;</button>
+      <div class="carousel" id="carousel">
+        <!-- Cards gerados via JS -->
+      </div>
+      <button class="arrow right" onclick="scrollCarousel(1)">&#9654;</button>
+    </div>
+  </section>
+    
+<script src="scripts/script_f1_bzk.js"></script>
+<!--------------------------------------------------------------------------------->
+<!-------------------------------------FOOTER-------------------------------------->
+<footer>
+  <div class="footer-content">
+    <span>© 2026 Campeonato Sombras do Asfalto. All rights reserved.</span>
+              <div class="social-icons">
+        <a href="https://www.instagram.com/csa_sombrasdoasfalto" target="_blank">
+          <img src="imagens/instagram.png" alt="Instagram" class="-icon">
+        </a>
+        <a href="https://www.youtube.com/@CSA_e-racing" target="_blank" >
+          <img src="imagens/youtube.png" alt="YouTube" class="social-icon">
+        </a>
+        <a href="https://discord.com/invite/KS6PuRd5" target="_blank" >
+          <img src="imagens/discord.png" alt="Discord" class="social-icon">
+        </a>
+      </div>
+    
+  </div>
+    <span class="footer-note">Desenvolvido por Jederson Borges</span> 
+  </div>
+</footer>
+<!--------------------------------------------------------------------------------->
+<!--------------------------------------------------------------------------------->
+</body>
+</html>

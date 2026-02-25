@@ -1,8 +1,7 @@
 
-  const pilotosURL = 'db/csa-season-1 - Pilotos.csv';
-  const etapasURL = 'db/csa-season-1 - Etapas.csv';
-  const pontuacaoURL = 'db/csa-season-1 - Pontuacao.csv'
-  const punicaoURL = 'db/csa-season-1 - Punicao.csv'
+  const pilotosURL = 'db/pilotosf1.csv';
+  const etapasURL = 'db/etapasf1.csv';
+  const pontuacaoURL = 'db/pontuacaof1.csv'
 
   async function carregarCSV(url) {
     const res = await fetch(url);
@@ -15,303 +14,60 @@
   }
 
 async function montarCardsPilotos() {
-
-  // 🔥 LISTA DE TEMPORADAS
-  const pilotosURLs = [
-    'db/csa-season-1 - Pilotos.csv',
-    'db/csa-season-2 - Pilotos.csv',
-    'db/csa-season-3 - Pilotos.csv'
-  ];
+  const pilotosData = await carregarCSV(pilotosURL);
+  const headersPilotos = pilotosData[0];
 
   const container = document.getElementById("cardsPilotos");
   if (!container) return;
+
   container.innerHTML = '';
 
-  function formatarPosicao(valor) {
-    if (valor == 'P0' || valor == 'P999') return "-";
-    return valor;
-  }
+  for (let i = 1; i < pilotosData.length; i++) {
+    const row = pilotosData[i];
+    const piloto = {};
+    headersPilotos.forEach((h, j) => piloto[h.trim().toLowerCase()] = row[j]?.trim());
 
-  function formatarNumero(valor) {
-    if (!valor || Number(valor) === 0) return "0";
-    return valor;
-  }
-
-  function gerarTrofeus(valor) {
-    const numero = Number(valor) || 0;
-    if (numero <= 0) return "0";
-    return "🏆".repeat(numero);
-  }
-
-  const pilotosMap = {};
-
-  // 🔥 LOOP POR TODAS AS TEMPORADAS
-  for (const pilotosURL of pilotosURLs) {
-
-    try {
-      const data = await carregarCSV(pilotosURL);
-      if (!data || data.length === 0) continue;
-
-      const headers = data[0];
-
-      for (let i = 1; i < data.length; i++) {
-        const row = data[i];
-        const piloto = {};
-
-        headers.forEach((h, j) => piloto[h.trim().toLowerCase()] = row[j]?.trim());
-
-        if (!piloto.piloto || !piloto.equipe || piloto.equipe.trim() === "") continue;
-        const id = piloto.piloto.toLowerCase().trim();
-
-        if (!pilotosMap[id]) {
-          pilotosMap[id] = { ...piloto, equipes: piloto.equipe ? [piloto.equipe] : [] };
-        } else {
-          for (let key in piloto) {
-
-            if (key === "avgpos") continue; // 🔥 não somar média
-
-            if (!isNaN(piloto[key])) {
-              pilotosMap[id][key] =
-                Number(pilotosMap[id][key] || 0) + Number(piloto[key]);
-            }
-          }
-
-          if (piloto.equipe && !pilotosMap[id].equipes.includes(piloto.equipe)) {
-            pilotosMap[id].equipes.push(piloto.equipe);
-          }
-        }
-      }
-
-    } catch (error) {
-      console.warn(`Não foi possível carregar ${pilotosURL}`);
-    }
-  }
-
-  // 🔥 AGORA MONTA OS CARDS NORMALMENTE
-  Object.values(pilotosMap).forEach(piloto => {
-
-    if (!piloto.equipes || piloto.equipes.length === 0) return;
-
-    const totalEntries = Number(piloto.entries || 0) + Number(piloto.sprintentries || 0);
-    const penalty = Number(piloto.penalty || 0);
-
-    let safetyRating = '-';
-    let shadowColor = 'transparent';
-
-    if (totalEntries > 0) {
-      const avgPenalty = penalty / totalEntries;
-
-      if (penalty === 0) {
-        safetyRating = 'S';
-        shadowColor = 'rgba(128,0,128,0.8)';
-      } else if (avgPenalty <= -2) {
-        safetyRating = 'C';
-        shadowColor = 'rgba(255,0,0,0.8)';
-      } else if (avgPenalty <= -1) {
-        safetyRating = 'B';
-        shadowColor = 'rgba(255,255,0,0.8)';
-      } else if (avgPenalty <= -0.5) {
-        safetyRating = 'A';
-        shadowColor = 'rgba(0,255,0,0.8)';
-      } else if (avgPenalty <= -0.2) {
-        safetyRating = 'S';
-        shadowColor = 'rgba(128,0,128,0.8)';
-      }
-    }
-
-    const equipeLogosHTML = piloto.equipes.map(eq =>
-      `<img class="team-logo" src="logos/${eq}.png">`
-    ).join('');
+    // Verifica se a equipe está vazia
+    if (!piloto.equipe || piloto.equipe === '') continue;
 
     const card = document.createElement("div");
     card.className = "piloto-card";
-    
-    card.innerHTML = `
-      <div class="card-inner">
-        <div class="card-header">
-          <h3 class="card-name">
-            <img class="flag" src="https://flagcdn.com/w40/${piloto.country}.png">
-            <span>${piloto.piloto}</span>
-          </h3>
-          
-          <div class="card-team" style="color: #${piloto.teamcolor}; filter: drop-shadow(0 0 4px #${piloto.teamcolor});">
-            ${equipeLogosHTML}
-          </div>
-          <div> <img class="card-driver-picture" src=logos/${piloto.piloto}.png> </div>
-        </div>
-        <div class="card-stats">
-          <div class="stat">
-            <strong>Safety Rating:</strong>
-            <span style="
-              font-weight:bold;
-              font-size:1.3em;
-              color:white;
-              text-shadow: 2px 2px 6px ${shadowColor};
-              margin-left:4px;
-            ">${safetyRating}</span>
-          </div>
 
-          <div class="stat"><strong>Participações:</strong> ${formatarNumero(piloto.entries)}</div>
-          <div class="stat"><strong>Melhor posição:</strong> ${formatarPosicao(piloto.best)}</div>
-          <div class="stat"><strong>Pior posição:</strong> ${formatarPosicao(piloto.worst)}</div>
-          <div class="stat"><strong>Posição média:</strong> ${formatarNumero(piloto.avgpos)}</div>
-          <div class="stat"><strong>Pontos:</strong> ${formatarNumero(piloto.points)}</div>
-
-          <div class="stat"><strong>WDC:</strong> ${gerarTrofeus(piloto.wdcchampion)}</div>
-          <div class="stat"><strong>WCC:</strong> ${gerarTrofeus(piloto.wccchampion)}</div>
-
-          <div class="stat"><strong>Vitórias:</strong> ${formatarNumero(piloto.win)}</div>
-          <div class="stat"><strong>Vitórias em Sprint:</strong> ${formatarNumero(piloto.sprintwin)}</div>
-          <div class="stat"><strong>Pódios:</strong> ${formatarNumero(piloto.podium)}</div>
-          <div class="stat"><strong>Pódios em Sprint:</strong> ${formatarNumero(piloto.sprintpodium)}</div>
-          <div class="stat"><strong>Top 10:</strong> ${formatarNumero(piloto["top 10"])}</div>
-          <div class="stat"><strong>Poles:</strong> ${formatarNumero(piloto.pole)}</div>
-          <div class="stat"><strong>Poles em Sprint:</strong> ${formatarNumero(piloto.sprintpole)}</div>
-          <div class="stat"><strong>Volta Rápida:</strong> ${formatarNumero(piloto.fl)}</div>
-          <div class="stat"><strong>Piloto do dia:</strong> ${formatarNumero(piloto.dotd)}</div>
-          <div class="stat"><strong>Pilotagem mais limpa:</strong> ${formatarNumero(piloto.cd)}</div>
-          <div class="stat"><strong>Punições:</strong> ${formatarNumero(piloto.penalty)}</div>
-        </div>
+    // <p class="card-team" style="color: #${piloto.teamcolor};"> <img style='width: 25px'; src="logos/${piloto.equipe}.png"/>  ${piloto.equipe}</p>
+card.innerHTML = `
+  <div class="card-inner">
+    <div class="card-header">
+      <h3 class="card-name">
+        <img class="flag" src="https://flagcdn.com/w40/${piloto.country}.png" alt="${piloto.country} flag">
+        <span>${piloto.piloto}</span>
+      </h3>
+      <div class="card-team" style="color: #${piloto.teamcolor}; filter: drop-shadow(0 0 4px #${piloto.teamcolor});">
+        <img class="team-logo" src="logos/${piloto.equipe}.png" alt="${piloto.equipe} logo">
       </div>
-    `;
+    </div>
+    <div class="card-stats">
+      <div class="stat"><strong>Entries:</strong> ${piloto.entries || 0}</div>
+      <div class="stat"><strong>Best Finish:</strong> ${piloto.best || 0}</div>
+      <div class="stat"><strong>Worst Finish:</strong> ${piloto.worst || 0}</div>
+      <div class="stat"><strong>Points:</strong> ${piloto.points || 0}</div>
+      <div class="stat"><strong>Wins:</strong> ${piloto.win || 0}</div>
+      <div class="stat"><strong>Podiums:</strong> ${piloto.podium || 0}</div>
+      <div class="stat"><strong>Top 10:</strong> ${piloto["top 10"] || 0}</div>
+      <div class="stat"><strong>Poles:</strong> ${piloto.pole || 0}</div>
+      <div class="stat"><strong>Fastest Laps:</strong> ${piloto.fl || 0}</div>
+      <div class="stat"><strong>Driver of the day:</strong> ${piloto.dotd || 0}</div>
+      <div class="stat"><strong>Cleanest Driver:</strong> ${piloto.cd || 0}</div>
+    </div>
+  </div>
+`;
+
+
 
     container.appendChild(card);
-  });
+  }
 }
 
 montarCardsPilotos();
-
-///////////////////////////////////////////////////////////////////////////////////////////////
-//Ranking
-
-async function montarRanking() {
-
-  const pilotosURL = 'db/csa-season-1 - Pilotos.csv';
-  const container = document.getElementById("tabelaPilotos");
-  if (!container) return;
-  container.innerHTML = '';
-
-  const data = await carregarCSV(pilotosURL);
-  const headers = data[0];
-  const pilotosMap = {};
-
-  // ======= MESMA LÓGICA DE AGRUPAMENTO =======
-  for (let i = 1; i < data.length; i++) {
-    const row = data[i];
-    const piloto = {};
-
-    headers.forEach((h, j) => piloto[h.trim().toLowerCase()] = row[j]?.trim());
-
-    if (!piloto.piloto || !piloto.equipe || piloto.equipe.trim() === "") continue;
-    const id = piloto.piloto.toLowerCase().trim();
-
-    if (!pilotosMap[id]) {
-      pilotosMap[id] = { ...piloto };
-    } else {
-      for (let key in piloto) {
-        if (!isNaN(piloto[key])) {
-          pilotosMap[id][key] =
-            Number(pilotosMap[id][key] || 0) + Number(piloto[key]);
-        }
-      }
-    }
-  }
-
-  let pilotos = Object.values(pilotosMap);
-
-  // ======= ORDENAÇÃO PADRÃO =======
-  pilotos.sort((a, b) =>
-    Number(b.points || 0) - Number(a.points || 0) ||
-    Number(b.win || 0) - Number(a.win || 0) ||
-    Number(b.podium || 0) - Number(a.podium || 0) ||
-    Number(b.pole || 0) - Number(a.pole || 0)
-  );
-
-  let ordemAtual = { coluna: "points", asc: false };
-
-function renderTabela(lista) {
-
-  let html = `
-    <table class="tabela-ranking">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th data-col="piloto">Piloto</th>
-          <th data-col="points">Pts</th>
-          <th data-col="win">Wins</th>
-          <th data-col="podium">Podiums</th>
-          <th data-col="pole">Poles</th>
-          <th data-col="entries">Entries</th>
-          <th data-col="avgpos">Avg Pos</th>
-        </tr>
-      </thead>
-      <tbody>
-  `;
-
-  lista.forEach((p, index) => {
-    html += `
-      <tr>
-        <td><strong>${index + 1}</strong></td>
-        <td>
-          <img class="flag" src="https://flagcdn.com/w20/${p.country}.png">
-          ${p.piloto}
-        </td>
-        <td>${p.points || 0}</td>
-        <td>${p.win || 0}</td>
-        <td>${p.podium || 0}</td>
-        <td>${p.pole || 0}</td>
-        <td>${p.entries || 0}</td>
-        <td>${p.avgpos || 0}</td>
-      </tr>
-    `;
-  });
-
-  html += `</tbody></table>`;
-  container.innerHTML = html;
-
-  adicionarOrdenacao();
-}
-
-  function adicionarOrdenacao() {
-    const ths = container.querySelectorAll("th");
-
-    ths.forEach(th => {
-      th.addEventListener("click", () => {
-        const coluna = th.dataset.col;
-
-        if (ordemAtual.coluna === coluna) {
-          ordemAtual.asc = !ordemAtual.asc;
-        } else {
-          ordemAtual.coluna = coluna;
-          ordemAtual.asc = false;
-        }
-
-        pilotos.sort((a, b) => {
-          let valA = a[coluna];
-          let valB = b[coluna];
-
-          if (!isNaN(valA) && !isNaN(valB)) {
-            return ordemAtual.asc
-              ? Number(valA) - Number(valB)
-              : Number(valB) - Number(valA);
-          } else {
-            return ordemAtual.asc
-              ? String(valA).localeCompare(String(valB))
-              : String(valB).localeCompare(String(valA));
-          }
-        });
-
-        renderTabela(pilotos);
-      });
-    });
-  }
-
-  renderTabela(pilotos);
-}
-
-montarRanking();
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -330,21 +86,8 @@ montarRanking();
     for (let i = 1; i < pilotosData.length; i++) {
       const row = pilotosData[i];
       const obj = {};
-
-      headersPilotos.forEach((h, j) =>
-        obj[h.trim().toLowerCase()] = row[j]?.trim()
-      );
-
+      headersPilotos.forEach((h, j) => obj[h.trim().toLowerCase()] = row[j]?.trim());
       obj.points = parseInt(obj.points || 0);
-
-      // ✅ BLOQUEIA piloto sem equipe
-      if (
-        !obj.piloto ||
-        !obj.equipe ||
-        obj.equipe.trim() === "" ||
-        obj.equipe.toLowerCase() === "reserve"
-      ) continue;
-
       const id = normalizarId(obj.piloto);
       pilotos[id] = obj;
     }
@@ -358,19 +101,18 @@ montarRanking();
       for (let r = 1; r < row.length; r++) {
         const piloto = normalizarId(row[r]);
         if (!resultadosPorPiloto[piloto]) resultadosPorPiloto[piloto] = [];
-        resultadosPorPiloto[piloto][r - 1] = i - 2;
+        resultadosPorPiloto[piloto][r - 1] = i - 1; // P1 = 1
       }
     }
 
     // Extras: Pole (A26), FL (A25), DOTD (A27), CD (A28)
     const extras = {};
     const extrasMap = {
-      26: 'F',
-      27: 'P',
-      28: 'D',
-      29: 'C'
+      25: 'F', // FL
+      26: 'P', // Pole
+      27: 'D', // DOTD
+      28: 'C'  // Cleanest Driver
     };
-
 
     for (let line in extrasMap) {
       const row = etapasData[+line];
@@ -383,7 +125,7 @@ montarRanking();
     }
 
     // DNFs (linhas 29–49 → índices 28–48)
-    for (let i = 29; i <= 49; i++) {
+    for (let i = 28; i <= 48; i++) {
       const row = etapasData[i];
       for (let r = 1; r < row.length; r++) {
         const piloto = normalizarId(row[r]);
@@ -401,35 +143,17 @@ montarRanking();
     const thead = table.querySelector("thead tr");
     const tbody = table.querySelector("tbody");
 
-// Cabeçalho
+    // Cabeçalho
 thead.innerHTML = `
   <th>#</th>
-  <th>Piloto</th>
-  <th>Equipe</th>
-  <th>Pontos</th>
+  <th>Driver</th>
+  <th>Team</th>
+  <th>Points</th>
   ${[...Array(rounds)].map((_, i) => {
-    const statusRaw = etapasData[0][i + 1] || ''; // R ou SR
-    const countryCode = etapasData[2][i + 1]?.toLowerCase() || '';
-
-    let statusText = '';
-    if (statusRaw === 'R') statusText = 'Race';
-    else if (statusRaw === 'SR') statusText = 'Sprint';
-
-    return `
-      <th>
-        <div class="round-header">
-          <span class="round-status" style="font-size:8px !important; line-height:1; display:block;">
-            ${statusText}
-          </span>
-          <img class="flag" src="https://flagcdn.com/w40/${countryCode}.png">
-        </div>
-      </th>
-    `;
+    const countryCode = etapasData[1][i + 1]?.toLowerCase() || ''; // linha 2 (índice 1), coluna i+1
+    return `<th><img class="flag" src="https://flagcdn.com/w40/${countryCode}.png"></th>`;
   }).join('')}
 `;
-
-
-
 
     // Corpo
     console.log(pilotos)
@@ -481,18 +205,16 @@ if (resultado === 'DNF') {
     fSize = '12px';
   }
 
-
   // Extras
-  const flLine   = 25;
-  const poleLine = 26;
-  const dotdLine = 27;
-  const cdLine   = 28;
+  const flLine = 24;
+  const poleLine = 25;
+  const dotdLine = 26;
+  const cdLine = 27;
 
-  const pilotoFL    = etapasData[flLine]?.[r + 1]?.trim();
-  const pilotoPole  = etapasData[poleLine]?.[r + 1]?.trim();
-  const pilotoDOTD  = etapasData[dotdLine]?.[r + 1]?.trim();
-  const pilotoCD    = etapasData[cdLine]?.[r + 1]?.trim();
-
+  const pilotoFL = etapasData[flLine]?.[r + 1]?.trim();
+  const pilotoPole = etapasData[poleLine]?.[r + 1]?.trim();
+  const pilotoDOTD = etapasData[dotdLine]?.[r + 1]?.trim();
+  const pilotoCD = etapasData[cdLine]?.[r + 1]?.trim();
 
   let extras = "";
 
@@ -574,17 +296,17 @@ async function montarTabelaEquipes() {
 
   // Obter posições dos pilotos
   const resultadosPorPiloto = {};
-  for (let i = 3; i <= 24; i++) {
+  for (let i = 2; i <= 23; i++) {
     const row = etapasData[i];
     for (let r = 1; r < row.length; r++) {
       const pilotoId = normalizarId(row[r]);
       if (!resultadosPorPiloto[pilotoId]) resultadosPorPiloto[pilotoId] = [];
-      resultadosPorPiloto[pilotoId][r - 1] = i - 2;
+      resultadosPorPiloto[pilotoId][r - 1] = i - 1; // posição (P1 = 1)
     }
   }
 
   // DNFs (linhas 29–49)
-  for (let i = 29; i <= 49; i++) {
+  for (let i = 28; i <= 48; i++) {
     const row = etapasData[i];
     for (let r = 1; r < row.length; r++) {
       const pilotoId = normalizarId(row[r]);
@@ -617,23 +339,8 @@ async function montarTabelaEquipes() {
       <th>Constructor</th>
       <th>Points</th>
       ${[...Array(rounds)].map((_, i) => {
-        const statusRaw = etapasData[0][i + 1] || ''; // R ou SR
-        const countryCode = etapasData[2][i + 1]?.toLowerCase() || '';
-
-        let statusText = '';
-        if (statusRaw === 'R') statusText = 'Race';
-        else if (statusRaw === 'SR') statusText = 'Sprint';
-
-        return `
-          <th>
-            <div class="round-header">
-              <span class="round-status" style="font-size:9px !important; line-height:1; display:block; opacity:0.7;">
-                ${statusText}
-              </span>
-              <img class="flag" src="https://flagcdn.com/w40/${countryCode}.png">
-            </div>
-          </th>
-        `;
+        const countryCode = etapasData[1][i + 1]?.toLowerCase() || '';
+        return `<th><img class="flag" src="https://flagcdn.com/w40/${countryCode}.png"></th>`;
       }).join('')}
     </tr>
   `;
@@ -750,9 +457,9 @@ async function montarTabelaCompacta() {
     thead.innerHTML = `
         <tr>
             <th>#</th>
-            <th>Piloto</th>
-            <th>Equipe</th>
-            <th>Pontos</th>
+            <th>Driver</th>
+            <th>Team</th>
+            <th>Points</th>
         </tr>
     `;
     table.appendChild(thead);
@@ -860,17 +567,27 @@ montarTabelaEquipesCompacta();
 async function montarTabelaPontuacao() {
   const pontuacaoData = await carregarCSV(pontuacaoURL);
 
+  // Mapeia os dados
+  const pontuacoes = {};
+  for (let i = 1; i < pontuacaoData.length; i++) {
+    const pos = pontuacaoData[i][0]?.trim();
+    const pts = pontuacaoData[i][1]?.trim();
+    if (pos && pts) {
+      pontuacoes[pos] = pts;
+    }
+  }
+
   const table = document.querySelector("#pontuacaoTable");
   const thead = table.querySelector("thead tr");
   const tbody = table.querySelector("tbody");
 
   // Cabeçalho
   const colunas = [
-    "Posição", "1°", "2°", "3°", "4°", "5°",
-    "6°", "7°", "8°", "9°", "10°",
-    "11°", "12°", "13°", "14°", "15°",
-    "16°", "17°", "18°", "19°", "20°",
-    "Pole"
+    "Position", "1st", "2nd", "3rd", "4th", "5th",
+    "6th", "7th", "8th", "9th", "10th",
+    "11th", "12th", "13th", "14th", "15th",
+    "16th", "17th", "18th", "19th", "20th",
+    "P", "F", "D", "C"
   ];
   thead.innerHTML = colunas.map(c => `<th>${c}</th>`).join('');
 
@@ -881,75 +598,78 @@ async function montarTabelaPontuacao() {
     if (pos === 3) return '#ffdf9f';
     if (pos >= 4 && pos <= 10) return '#dfffdf';
     if (pos >= 11 && pos <= 20) return '#cfcfff';
-    return '#f4f4f4';
+    return '#f4f4f4'; // fallback
   }
 
-  tbody.innerHTML = "";
-
-  /* =======================
-     RACE
-     linhas 2–21 + 25
-     ======================= */
-
+  // Linha Race
   const trRace = document.createElement('tr');
   trRace.innerHTML = `<td style="border:1px solid black; text-align:center;">Race</td>`;
-
-  // posições
-  for (let i = 0; i < 20; i++) {
-    const pontos = pontuacaoData[1 + i]?.[1] || 0; // linhas 2–21
+  for (let i = 1; i <= 20; i++) {
+    const pontos = pontuacoes[`P${i}`] || 0;
     const td = document.createElement('td');
     td.textContent = pontos;
     td.className = "ptoSquare";
-    td.style.backgroundColor = corPorPosicao(i + 1);
+    td.style.backgroundColor = corPorPosicao(i);
     td.style.textAlign = "center";
     td.style.border = "1px solid black";
     trRace.appendChild(td);
   }
 
-  // Pole Race (linha 25)
-  const poleRace = pontuacaoData[24]?.[1] || 0;
-  const tdPoleRace = document.createElement('td');
-  tdPoleRace.textContent = poleRace;
-  tdPoleRace.className = "ptoSquare";
-  tdPoleRace.style.backgroundColor = "#ffe0ff";
-  tdPoleRace.style.textAlign = "center";
-  tdPoleRace.style.border = "1px solid black";
-  trRace.appendChild(tdPoleRace);
+  // Extras Race
+  const extrasRace = {
+    Pole: "#ffe0ff",
+    FL: "#ffe0ff",
+    DOTD: "#ffe0ff",
+    CD: "#ffe0ff"
+  };
+
+  Object.keys(extrasRace).forEach(key => {
+    const td = document.createElement('td');
+    td.textContent = pontuacoes[key] || 0;
+    td.className = "ptoSquare";
+    td.style.backgroundColor = extrasRace[key];
+    td.style.textAlign = "center";
+    td.style.border = "1px solid black";
+    trRace.appendChild(td);
+  });
 
   tbody.appendChild(trRace);
 
-  /* =======================
-     SPRINT
-     linhas 28–47 + 51
-     ======================= */
-
+  // Linha Sprint
   const trSprint = document.createElement('tr');
   trSprint.innerHTML = `<td style="border:1px solid black; text-align:center;">Sprint</td>`;
-
-  // posições
-  for (let i = 0; i < 20; i++) {
-    const pontos = pontuacaoData[27 + i]?.[1] || 0; // linhas 28–47
+  for (let i = 1; i <= 20; i++) {
+    const pontos = pontuacoes[`SP${i}`] || 0;
     const td = document.createElement('td');
     td.textContent = pontos;
     td.className = "ptoSquare";
-    td.style.backgroundColor = corPorPosicao(i + 1);
+    td.style.backgroundColor = corPorPosicao(i);
     td.style.textAlign = "center";
     td.style.border = "1px solid black";
     trSprint.appendChild(td);
   }
 
-  // Pole Sprint (linha 51)
-  const poleSprint = pontuacaoData[50]?.[1] || 0;
-  const tdPoleSprint = document.createElement('td');
-  tdPoleSprint.textContent = poleSprint;
-  tdPoleSprint.className = "ptoSquare";
-  tdPoleSprint.style.backgroundColor = "#ffe0ff";
-  tdPoleSprint.style.textAlign = "center";
-  tdPoleSprint.style.border = "1px solid black";
-  trSprint.appendChild(tdPoleSprint);
+  // Extras Sprint
+  const extrasSprint = {
+    Pole: "#ffe0ff",
+    FL: "#ffe0ff",
+    DOTD: "#ffe0ff",
+    CD: "#ffe0ff"
+  };
+
+  Object.keys(extrasSprint).forEach(key => {
+    const td = document.createElement('td');
+    td.textContent = pontuacoes[`S${key}`] || 0; // procura por SPole, SFL, etc.
+    td.className = "ptoSquare";
+    td.style.backgroundColor = extrasSprint[key];
+    td.style.textAlign = "center";
+    td.style.border = "1px solid black";
+    trSprint.appendChild(td);
+  });
 
   tbody.appendChild(trSprint);
 }
+
 
 montarTabelaPontuacao();
 
@@ -988,7 +708,7 @@ async function montarTabelaHeadToHead() {
   }
 
   // DNFs (linhas 29–49 → índices 28–48)
-  for (let i = 29; i <= 49; i++) {
+  for (let i = 28; i <= 48; i++) {
     const row = etapasData[i];
     for (let r = 1; r < row.length; r++) {
       const piloto = normalizarId(row[r]);
@@ -1177,162 +897,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// Função para ler CSV e transformar em array
-async function loadCSV(url) {
-  const res = await fetch(url);
-  const text = await res.text();
-  return text.split('\n').map(row => row.split(','));
-}
-
-// Função para montar o calendário dinamicamente
-async function buildCalendar() {
-  const etapasData = await loadCSV(etapasURL);
-  
-  const carousel = document.getElementById('carousel');
-
-  // Itera pelas colunas da planilha (B em diante)
-  for (let col = 1; col < etapasData[0].length; col++) {
-    if (etapasData[0][col]?.trim() === 'R') {
-      const roundNumber = etapasData[1][col]?.trim().replace('R', '');
-      const flag = etapasData[2][col]?.trim().toLowerCase();
-      const date = etapasData[79][col]?.trim() || '';
-      
-      // Linha 82 do CSV = índice 81
-      let location = '';
-      if (etapasData[81] && etapasData[81][col]) {
-        location = etapasData[81][col].trim();
-      } else {
-        location = flag?.toUpperCase() || '';
-      }
-
-      // Cria card
-      const card = document.createElement('div');
-      card.className = 'calendar-card';
-      card.innerHTML = `
-        <div class="round">ROUND</div>
-        <div class="round-number">${roundNumber}</div>
-        <img class="flag" src="https://flagcdn.com/w40/${flag}.png" alt="">
-        <div class="location">${location}</div>
-        <div class="time"><img style="width: 50px;" src="logos/f1.png" alt=""> ${date}</div>
-        <div class="time"><img style="width: 50px; margin-bottom: -8px;" src="logos/f2-white.png" alt="">🏆 Placeholder</div>
-      `;
-      carousel.appendChild(card);
-    }
-  }
-}
-
-buildCalendar();
-
-// Função do scroll do carrossel
-function scrollCarousel(direction) {
-  const carousel = document.getElementById('carousel');
-  const scrollAmount = 220;
-  carousel.scrollBy({ left: scrollAmount * direction, behavior: 'smooth' });
-}
 
 
-async function carregarCalendario() {
-  const response = await fetch(etapasURL);
-  const data = await response.text();
 
-  const linhas = data.split('\n').map(l => l.split(','));
-
-  const rounds = linhas[1].slice(1);       // Linha 2 (R1, R2...)
-  const paises = linhas[2].slice(1);       // Linha 3 (jp, br...) - ainda usado para bandeira
-  const vencedores = linhas[3].slice(1);   // Linha 4 (winner F1)
-  const datas = linhas[79].slice(1);       // Linha 80
-  const horarios = linhas[80].slice(1);    // Linha 81
-  const locais = linhas[81].slice(1);      // Linha 82 - agora para location
-
-  const carousel = document.getElementById('carousel');
-  carousel.innerHTML = '';
-
-  rounds.forEach((round, index) => {
-
-    const codigoPais = paises[index]?.trim().toLowerCase();
-    const nomePais = locais[index]?.trim() || codigoPais.toUpperCase(); // Linha 82 usada para location
-    const vencedor = vencedores[index]?.trim();
-
-    const dataCorrida = datas[index]?.trim();
-    const horarioCorrida = horarios[index]?.trim();
-
-    const numeroRound = round.replace("R", "");
-
-    const card = document.createElement('div');
-    card.classList.add('calendar-card');
-
-    let infoExtra = "";
-
-    if (vencedor) {
-      const segundo = linhas[4] && linhas[4][index + 1]
-        ? linhas[4][index + 1].trim()
-        : "";
-
-      infoExtra = `
-        <div class="time">
-          🏆 ${vencedor}
-        </div>
-        <div class="time">
-          <span class="silver-trophy">🏆</span> ${segundo}
-        </div>
-      `;
-
-    } else {
-      infoExtra = `
-        ${dataCorrida ? `<div class="time">${dataCorrida}</div>` : ""}
-        ${horarioCorrida ? `<div class="time">${horarioCorrida}</div>` : ""}
-      `;
-    }
-
-    card.innerHTML = `
-      <div class="round">ROUND</div>
-      <div class="round-number">${numeroRound}</div>
-      <img class="flag" src="https://flagcdn.com/w40/${codigoPais}.png" alt="">
-      <div class="location">${nomePais}</div>
-      ${infoExtra}
-    `;
-
-    carousel.appendChild(card);
-  });
-}
-
-document.addEventListener('DOMContentLoaded', carregarCalendario);
-
-////////////////////////////////////////////////////////////////
-//// PUNICOES
-
-async function montarTabelaPunicoes() {
-
-  const data = await carregarCSV(punicaoURL);
-
-  const tbody = document.querySelector("#penaltiesTable tbody");
-  tbody.innerHTML = '';
-
-  // começa na linha 2 (índice 1)
-  for (let i = 1; i < data.length; i++) {
-
-    const row = data[i];
-
-    const gp = row[0]?.trim();
-    const flag = row[1]?.trim();
-    const piloto = row[2]?.trim();
-    const motivo = row[3]?.trim();
-    const penalidade = row[4]?.trim();
-
-    // ignora linhas vazias
-    if (!gp || !piloto) continue;
-
-    const tr = document.createElement("tr");
-
-    tr.innerHTML = `
-      <td><img class="flag" src="https://flagcdn.com/w40/${flag}.png"> ${gp}</td>
-      <td>${piloto}</td>
-      <td>${motivo}</td>
-      <td><strong>-${penalidade}</strong></td>
-    `;
-
-    tbody.appendChild(tr);
-  }
-}
-
-montarTabelaPunicoes();

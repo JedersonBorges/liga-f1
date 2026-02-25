@@ -1,0 +1,122 @@
+        body {
+            font-family: 'Titillium Web', sans-serif;
+            background-color: #15151e;
+            color: white;
+        }
+        .f1-red { color: #e10600; }
+        .f1-bg-red { background-color: #e10600; }
+        .nav-gradient {
+            background: linear-gradient(180deg, #1f1f27 0%, #15151e 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        * CALENDAR  */
+
+.calendar-container {
+  background-color: #111111;
+}
+
+.carousel {
+display: flex;
+overflow-x: auto;
+scroll-behavior: smooth;
+gap: 20px;
+padding: 10px;
+scrollbar-width: none; /* Firefox */
+}
+.carousel::-webkit-scrollbar {
+display: none;
+}
+
+
+.carousel-wrapper {
+max-width: 1200px;
+position: relative;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 10px;
+margin-bottom: 30px;
+margin: 0 auto;
+overflow-x: auto;
+padding-bottom: 10px;
+-webkit-overflow-scrolling: touch;
+}
+
+.calendar-container h2 {
+font-size: 2.5rem;
+margin-bottom: 40px;
+letter-spacing: 2px;
+
+}
+
+.card-wrapper {
+display: flex;
+gap: 20px;
+justify-content: center;
+flex-wrap: wrap;
+}
+
+.calendar-card {
+background: linear-gradient(145deg, #1c1c1c 0%, #000 100%);
+border: 1px solid #333;
+border-radius: 14px;
+padding: 20px 16px;
+width: 200px;
+min-width: 180px;
+min-height: 260px; /* <-- define altura mínima consistente */
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: space-between;
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5);
+}
+
+.calendar-card:hover {
+transform: translateY(-5px);
+box-shadow: 0 12px 24px rgba(255, 0, 0, 0.8);
+}
+
+.round {
+color: #e10600;
+font-weight: bold;
+font-size: 0.9rem;
+margin-bottom: 5px;
+}
+
+.round-number {
+font-size: 2rem;
+font-weight: bold;
+}
+
+
+
+.location {
+font-weight: 700;
+font-size: 1.1rem;
+margin-bottom: 6px;
+color: #fff;
+text-align: center;
+}
+
+
+
+.arrow {
+background-color: transparent;
+border: none;
+font-size: 2rem;
+color: #aaa;
+cursor: pointer;
+transition: color 0.2s;
+}
+.arrow:hover {
+color: #fff;
+}
+
+
+
+
+/***************************/
